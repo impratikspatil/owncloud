@@ -1,0 +1,86 @@
+
+sudo apt update && sudo apt upgrade -y    (this command to update the system)
+
+sudo systemctl status apache2     ( this command to ensure the apache installed on system)
+
+sudo systemctl status mariadb      (this command is used to ensure mariadb installed on system)
+
+php -v  					( to check php available on system)
+
+sudo apt install -y php-imagick php-common php-curl php-gd php-imap php-intl php-json php-mbstring php-mysql php-ssh2 php-xml php-zip php-apcu php-redis redis-server
+
+sudo mysql -uroot -p         ( to login to mariadb)
+
+CREATE DATABASE ownclouddb;    ( create new database in mariadb)
+
+CREATE USER ownclouduser@localhost IDENTIFIED BY 'OwnCloundPwd';
+
+GRANT ALL ON ownclouddb.* TO ownclouduser@localhost;
+
+FLUSH PRIVILEGES;
+
+EXIT			( exit from console)
+
+cd /var/www/      (enter this command on command line)
+
+https://owncloud.com/download-server/    (insert link on browser)
+
+in zip download button, right click and get "copy link location"
+
+again come on termina inster the command below
+sudo wget "copied link" 						( to download owncloud )
+
+
+use command "ll"            ( to display zip files in the folder)
+
+sudo unzip "zipfilaname" you will get through above command. It is in red line
+
+sudo chown -R www-data:www-data /var/www/owncloud
+
+sudo chmod -R 755 /var/www/owncloud
+
+sudo vim /etc/apache2/conf-available/owncloud.conf
+
+//note: use this below 12 lines code togather
+
+Alias /owncloud "/var/www/owncloud/"     
+
+<Directory /var/www/owncloud/>
+	Options +FollowSymlinks
+	AllowOverride All
+	<IfModule mod_dav.c>
+		Dav off
+	</IfModule>
+
+	SetEnv HOME /var/www/owncloud
+	SetEnv HTTP_HOME /var/www/owncloud
+</Directory>
+
+
+enter ESC button to  move outside this (ESC or X button) 
+
+sudo a2enconf owncloud.conf
+
+sudo a2enmod rewrite headers env dir mime
+
+sudo systemctl restart apache2
+
+sudo systemctl restart mariadb
+
+go on browser and insert - http//:localhost/owncloud
+
+you will redirect to owncloud and create new username password and login there 
+
+some fields need to be filled 
+
+Database user - ownclouduser
+
+Database password -OwnCloudPwd
+
+Database name - ownclouddb
+
+localhost
+
+finish setup 
+
+relogin 
